@@ -28,7 +28,7 @@ class Board {
             || startPoint[1] > 7) return;
 
         let moveOptions = []
-        let length = movesArr.length
+        
         for (let move of piece.moves) {
             let moveOption = [];
             moveOption.push(move[0] + startPoint[0]);
@@ -42,10 +42,10 @@ class Board {
                     moveOptions.push(moveOption)
                     console.log(moveOption)
             }
-            if (length == movesArr.length) return;
         }
 
         // while (moveOptions.length > 0) {
+        //     console.log(movesArr)
         //     this.findMoves(moveOptions[0], piece, movesArr);
         // }
         
@@ -74,5 +74,27 @@ chess.createBoard();
 let knight = new Knight;
 
 
-chess.findMoves([1, 1], knight)
+// chess.findMoves([1, 1], knight)
 
+let nested = [
+    [0, 0],
+    [0, 1],
+    [0, 2],
+    [0, 3], 
+    [0, 4]
+]
+
+let test = [0, 0]
+
+let compareArrays = (arr, test) => {
+    arr.forEach(element => {
+        if (element.length != test.length) return false;
+        for (let i=0; i<test.length; i++) {
+            if (element[i] !== test[i]) return false;
+        }
+        
+    });
+    return true;
+}
+
+console.log(compareArrays(nested, test))
