@@ -86,24 +86,28 @@ const buildTree = (position, goal) => {
 }
 
 const knightMoves = (start, goal, movesArr=[], count=0, capturedLast=false) => {
+    // add 'goal' position to array as function moves backwards 
+    // from goal but never captures
     if (!capturedLast) {
         movesArr.push(goal);
         capturedLast = true;
     } 
-      // if start position is the goal, return;
+      // if start position == goal, print statement and return;
     if (compareArrays(start, goal)) {
         console.log(`You made it in ${count} moves! Here's your path:`);
-        for (let i=movesArr.length-1; i>=0; i--) {
-            console.log(`[${movesArr[i]}]`)
+        for (let move of movesArr) {
+            console.log(`[${move}]`)
         }
-
         return {movesArr, count};
     }
       // if not increment count;
     count++;
        // found variable used to exit while loop;
     let found = false;
-      // store moves
+      // store moves in a queue to find fastest possible route,
+      // if an available move == goal (first pass) then it will be caught and returned
+      // if not store possible moves from each move (second pass) in queue
+      // repeat until goal is found
     let positionQueue = [];
     positionQueue.push(start);
 
@@ -111,15 +115,16 @@ const knightMoves = (start, goal, movesArr=[], count=0, capturedLast=false) => {
         for (let move of chess.possibleMoves(positionQueue[0])) {
             if (compareArrays(move, goal)) {
                 found = true;
-                movesArr.push(positionQueue[0])
+                movesArr.unshift(positionQueue[0])
             } else {
                 positionQueue.push(move);
             }
         }
         positionQueue.shift();
     }
-    // return movesArr[movesArr.length - 1]
-    return knightMoves(start, movesArr[movesArr.length - 1], movesArr, count, capturedLast)  
+      // decrement goal to become position that reached current goal in one move;
+      // recurse until start position is equal to goal position;
+    return knightMoves(start, movesArr[0], movesArr, count, capturedLast)  
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -127,6 +132,7 @@ const knightMoves = (start, goal, movesArr=[], count=0, capturedLast=false) => {
 knightMoves([0,0], [7, 7]) // =>
 
 // You made it in 6 moves! Here's your path:
+
 // [0,0]
 // [1,2]
 // [2,4]
