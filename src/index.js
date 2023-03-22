@@ -77,17 +77,16 @@ let knight = new gamePiece([
     [-2, -1]
 ]);
 
+  // quick comparison function
 let compareArrays = (arr, test) => {
     return JSON.stringify(arr) == JSON.stringify(test);
 }
 
-const buildTree = (position, goal) => {
-    
-}
-
 const knightMoves = (start, goal, movesArr=[], count=0, capturedLast=false) => {
-    // add 'goal' position to array as function moves backwards 
-    // from goal but never captures
+      // use movesArr to store all moves along quickest route to goal
+
+      // add 'goal' position to array as function moves backwards 
+      // from goal but never captures
     if (!capturedLast) {
         movesArr.push(goal);
         capturedLast = true;
@@ -109,27 +108,31 @@ const knightMoves = (start, goal, movesArr=[], count=0, capturedLast=false) => {
       // if not store possible moves from each move (second pass) in queue
       // repeat until goal is found
     let positionQueue = [];
+      // add start position to queue
     positionQueue.push(start);
-
+      // FIFO queue until correct move is found
     while(found == false) {
         for (let move of chess.possibleMoves(positionQueue[0])) {
             if (compareArrays(move, goal)) {
                 found = true;
+                  // if move is found add move to front of movesArr
                 movesArr.unshift(positionQueue[0])
             } else {
+                  // otherwise add move to queue
                 positionQueue.push(move);
             }
         }
         positionQueue.shift();
     }
-      // decrement goal to become position that reached current goal in one move;
+      // create new goal (current first position in movesArr) to 
+      // become position that reached current goal in one move;
       // recurse until start position is equal to goal position;
     return knightMoves(start, movesArr[0], movesArr, count, capturedLast)  
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-knightMoves([0,0], [7, 7]) // =>
+knightMoves([0, 0], [7, 7]) // =>
 
 // You made it in 6 moves! Here's your path:
 
