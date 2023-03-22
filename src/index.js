@@ -85,9 +85,20 @@ const buildTree = (position, goal) => {
     
 }
 
-const knightMoves = (start, goal, movesArr=[], count=0) => {
+const knightMoves = (start, goal, movesArr=[], count=0, capturedLast=false) => {
+    if (!capturedLast) {
+        movesArr.push(goal);
+        capturedLast = true;
+    } 
       // if start position is the goal, return;
-    if (compareArrays(start, goal)) return movesArr;
+    if (compareArrays(start, goal)) {
+        console.log(`You made it in ${count} moves! Here's your path:`);
+        for (let i=movesArr.length-1; i>=0; i--) {
+            console.log(`[${movesArr[i]}]`)
+        }
+
+        return {movesArr, count};
+    }
       // if not increment count;
     count++;
        // found variable used to exit while loop;
@@ -107,43 +118,22 @@ const knightMoves = (start, goal, movesArr=[], count=0) => {
         }
         positionQueue.shift();
     }
-        
-
-
-    return movesArr[0];  
+    // return movesArr[movesArr.length - 1]
+    return knightMoves(start, movesArr[movesArr.length - 1], movesArr, count, capturedLast)  
 }
-    
 
-console.log(knightMoves([0,0], [2, 2]))
-console.log(knightMoves([0,0], [4, 3]))
-console.log(knightMoves([0,0], [2, 4]))
-console.log(knightMoves([0,0], [1, 2]))
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+knightMoves([0,0], [7, 7]) // =>
 
+// You made it in 6 moves! Here's your path:
+// [0,0]
+// [1,2]
+// [2,4]
+// [3,6]
+// [4,4]
+// [5,6]
+// [7,7]
 
-// TESTING 
-// const testing = (() => {
-//     let nested = [
-//         [0, 0],
-//         [0, 1],
-//         [0, 2],
-//         [0, 3], 
-//         [0, 4]
-//     ]
-
-//     let test = [0, 0]
-
-//     let compareArrays = (arr, test) => {
-//         arr.forEach(element => {
-//             if (element.length != test.length) return false;
-//             for (let i=0; i<test.length; i++) {
-//                 if (element[i] !== test[i]) return false;
-//             }
-            
-//         });
-//         return true;
-//     }
-
-//     console.log(compareArrays(nested, test))
-// })()
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
